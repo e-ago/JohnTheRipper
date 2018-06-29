@@ -155,9 +155,7 @@ int process_encrypted_image(char *image_path)
 	int version = 0, i = 0, match = 0, ret = 0;
 	unsigned char c,d;
 
-	fprintf(stderr, "Opening file %s\n", image_path);
 	fp_eimg = fopen(image_path, "r");
-
 	if (!fp_eimg) {
 		fprintf(stderr, "! %s : %s\n", image_path, strerror(errno));
 		return 1;
