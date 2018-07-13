@@ -74,7 +74,7 @@ int userPasswordFound=0, recoveryPasswordFound=0, found_ccm=0;
 long int fp_before_aes=0, fp_before_salt=0;
 FILE *fp_eimg;
 int salt_pos[2] = {12, 32};
-int aes_pos[2] = {147, 67};
+int aes_pos[1] = {147};
 
 static void fillBuffer(FILE *fp, unsigned char *buffer, int size)
 {
@@ -109,7 +109,7 @@ static int rp_search_salt_aes() {
 		FRET_CHECK(fp_before_aes)
 		fprintf(stderr, "Searching AES-CCM from 0x%lx\n", fp_before_aes);
 
-		for(y=0; y < 2; y++)
+		for(y=0; y < 1; y++)
 		{
 			ret=fseek(fp_eimg, aes_pos[y], SEEK_CUR);
 			FRET_CHECK(ret)
