@@ -47,11 +47,11 @@
 #define SIGNATURE_LEN            9
 
 #define FRET_CHECK(ret)								\
-        if(ret < 0)									\
-        {										\
-        	fprintf(stderr, "ftell error %s (%d)\n", strerror(errno),errno);	\
-        	exit(EXIT_FAILURE);							\
-        }
+	if(ret < 0)									\
+	{										\
+		fprintf(stderr, "ftell error %s (%d)\n", strerror(errno),errno);	\
+		exit(EXIT_FAILURE);							\
+	}
 
 
 static unsigned char p_salt[SALT_SIZE], p_nonce[NONCE_SIZE], p_mac[MAC_SIZE], p_vmk[VMK_SIZE];
@@ -121,7 +121,7 @@ static int rp_search_salt_aes() {
 				fprintf(stderr, "Error: VMK not encrypted with AES-CCM (0x%x,0x%x)\n", a, b);
 				found_ccm=0;
 			}
-			else 
+			else
 			{
 				fprintf(stderr, "VMK encrypted with AES-CCM!!\n");
 				found_ccm=1;
@@ -141,7 +141,7 @@ static int rp_search_salt_aes() {
 		else if(x==0)
 		{
 			ret=fseek(fp_eimg, fp_before_salt, SEEK_SET);
-			FRET_CHECK(ret)			
+			FRET_CHECK(ret)
 		}
 	}
 
@@ -209,13 +209,13 @@ int process_encrypted_image(char *image_path)
 			fp_before_salt = ftell(fp_eimg);
 			FRET_CHECK(fp_before_salt)
 
-			if ((c == key_protection_clear[0]) && (d == key_protection_clear[1])) 
+			if ((c == key_protection_clear[0]) && (d == key_protection_clear[1]))
 				fprintf(stderr, "VMK not encrypted.. stored clear! (0x%lx)\n", fp_before_salt);
-			else if ((c == key_protection_tpm[0]) && (d == key_protection_tpm[1])) 
+			else if ((c == key_protection_tpm[0]) && (d == key_protection_tpm[1]))
 				fprintf(stderr, "VMK encrypted with TPM...not supported! (0x%lx)\n", fp_before_salt);
-			else if ((c == key_protection_start_key[0]) && (d == key_protection_start_key[1])) 
+			else if ((c == key_protection_start_key[0]) && (d == key_protection_start_key[1]))
 				fprintf(stderr, "VMK encrypted with Startup Key...not supported! (0x%lx)\n", fp_before_salt);
-			else if ((c == key_protection_recovery[0]) && (d == key_protection_recovery[1]) && recoveryPasswordFound == 0) 
+			else if ((c == key_protection_recovery[0]) && (d == key_protection_recovery[1]) && recoveryPasswordFound == 0)
 			{
 				fprintf(stderr, "\nVMK encrypted with Recovery Password found at 0x%lx\n", fp_before_salt);
 				rp_search_salt_aes();
@@ -225,15 +225,15 @@ int process_encrypted_image(char *image_path)
 					i=0;
 					continue;
 				}
-				
+
 				fillBuffer(fp_eimg, r_nonce, NONCE_SIZE);
 				fprintf(stdout, "RP Nonce: ");
 				print_hex(r_nonce, NONCE_SIZE, stdout);
-				
+
 				fillBuffer(fp_eimg, r_mac, MAC_SIZE);
 				fprintf(stdout, "\nRP MAC: ");
 				print_hex(r_mac, MAC_SIZE, stdout);
-				
+
 				fprintf(stdout, "\nRP VMK: ");
 				fillBuffer(fp_eimg, r_vmk, VMK_SIZE);
 				print_hex(r_vmk, VMK_SIZE, stdout);
@@ -241,7 +241,7 @@ int process_encrypted_image(char *image_path)
 				fflush(stdout);
 				recoveryPasswordFound=1;
 			}
-			else if ((c == key_protection_password[0]) && (d == key_protection_password[1]) && userPasswordFound == 0) 
+			else if ((c == key_protection_password[0]) && (d == key_protection_password[1]) && userPasswordFound == 0)
 			{
 				fprintf(stderr, "\nVMK encrypted with User Password found at %lx\n", fp_before_salt);
 				ret=fseek(fp_eimg, 12, SEEK_CUR);
