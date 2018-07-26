@@ -291,7 +291,7 @@ int process_encrypted_image(char *image_path)
 	} else {
 		if (userPasswordFound == 1) {
 			// UP
-			printf("\nUser Password hash:\n$bitlocker$%d$%d$", HASH_UP, SALT_SIZE);
+			printf("\nUser Password hash:\n");
 			printf("$bitlocker$%d$%d$", HASH_UP, SALT_SIZE);
 			print_hex(p_salt, SALT_SIZE, stdout);
 			printf("$%d$%d$", 0x100000, NONCE_SIZE); // fixed iterations , fixed nonce size
