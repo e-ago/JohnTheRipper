@@ -74,11 +74,13 @@ static struct device_bitstream bitstream = {
 	// computing performance estimation (in candidates per interval)
 	// (keys * mask_num_cand)/crypt_all_interval per jtr_device.
 	1,			// set by init()
-	128*1024,	// Absolute max. keys/crypt_all_interval for all devices.
+	4096,		// 4K keys/fpga for self-test
+	512 * 1024,	// Would be 32 MB of USB traffic on 64-byte keys
 	512,		// Max. number of entries in onboard comparator.
 	160,		// Min. number of keys for effective device utilization
 	1, { 135 },	// Programmable clocks
-	"sha512crypt"	// label for configuration file
+	"sha512crypt",	// label for configuration file
+	"\x00", 1		// Initialization data
 };
 
 
@@ -295,9 +297,9 @@ struct fmt_main fmt_ztex_sha512crypt = {
 		BINARY_ALIGN,
 		SALT_SIZE,
 		SALT_ALIGN,
-		1, //MIN_KEYS_PER_CRYPT,
-		1, //MAX_KEYS_PER_CRYPT,
-		FMT_CASE | FMT_8_BIT | FMT_TRUNC | FMT_MASK,
+		1, // set by device_format_reset()
+		1,
+		FMT_CASE | FMT_8_BIT | FMT_MASK,
 		{
 			"iteration count",
 		},
